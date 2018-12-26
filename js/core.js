@@ -101,9 +101,15 @@ class Util{
   /**----------------------------------------------------------------------------
    * > Clone object
    */
-  static clone(obj){
-    let dup = Object.assign({}, obj);
-    dup.constructor = obj.constructor;
+  static clone(obj, deep = true){
+    let dup = null;
+    if(deep){
+      dup = JSON.parse(JSON.stringify(obj));
+    }
+    else{
+      dup = Object.assign({}, obj);
+      dup.constructor = obj.constructor;
+    }
     return dup;
   }
   /**----------------------------------------------------------------------------
@@ -357,8 +363,10 @@ class SChart{
    */
   constructor(canvas, config = ChartManager.DefaultChartSetting){
     this.canvas = canvas;
-    this.config = config;
+    this.config = Util.clone(config);
   }
+
+  get datasets(){return this.config.data.datasets}
 
   start(){
     this.chart = new Chart(this.canvas, this.config);
@@ -381,15 +389,15 @@ class SChart{
 
   appendDataset(dat, xlb, ylb){
     if(Util.isClassOf(dat, Array)){
-      let dats = ChartManager.DefaultDataset;
+      let dats = Util.clone(ChartManager.DefaultDataset);
       dats.data = dat;
       this.config.data.datasets.push(dats);
     }
     else{
       this.config.data.datasets.push(dat);
     }
-    if(xlb === undefined){xlb = ChartManager.DefaultDataXLabel;}
-    if(ylb === undefined){ylb = ChartManager.DefaultDataYLabel;}
+    if(xlb === undefined){xlb = Util.clone(ChartManager.DefaultDataXLabel);}
+    if(ylb === undefined){ylb = Util.clone(ChartManager.DefaultDataYLabel);}
     if(xlb){this.config.options.scales.xAxes.push(xlb);}
     if(ylb){this.config.options.scales.yAxes.push(ylb);}
     this.update();
@@ -397,7 +405,7 @@ class SChart{
   }
 
   changeDataIndex(i, dat){
-    this.config.data.datasets[i].data = dat;
+    this.config.data.datasets[i] = dat;
     this.update();
   }
 
@@ -460,5 +468,9 @@ class SChart{
 
   changePointSize(i,ps){
     this.config.data.datasets[i].pointRadius = ps;
+  }
+
+  popData(){
+    return this.datasets.pop();
   }
 }

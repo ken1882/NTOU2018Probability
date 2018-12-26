@@ -42,92 +42,156 @@
   {
     "year": "90",
     "debt": "1241.6",
-    "mayor": "馬英九"
+    "mayor": "馬英九",
+    "loan": "203",
+    "return": "97"
   },
   {
     "year": "91",
     "debt": "1418.4",
-    "mayor": "馬英九"
+    "mayor": "馬英九",
+    "loan": "227",
+    "return": "50"
   },
   {
     "year": "92",
     "debt": "1533.7",
-    "mayor": "馬英九"
+    "mayor": "馬英九",
+    "loan": "187",
+    "return": "51"
   },
   {
     "year": "93",
     "debt": "1805.2",
-    "mayor": "馬英九"
+    "mayor": "馬英九",
+    "loan": "306",
+    "return": "55"
   },
   {
     "year": "94",
     "debt": "1753.5",
-    "mayor": "馬英九"
+    "mayor": "馬英九",
+    "income": "1581.5",
+    "outcome": "1420.39",
+    "loan": "0",
+    "return": "52"
   },
   {
     "year": "95",
     "debt": "1698.7",
-    "mayor": "馬英九"
+    "mayor": "馬英九",
+    "income": "1532.14",
+    "outcome": "1411.45",
+    "loan": "1",
+    "return": "56"
   },
   
   {
     "year": "96",
     "debt": "1619.5",
-    "mayor": "郝龍斌"
+    "mayor": "郝龍斌",
+    "income": "1617.96",
+    "outcome": "1523.17",
+    "loan": "58",
+    "return": "137"
   },
   {
     "year": "97",
     "debt": "1533.5",
-    "mayor": "郝龍斌"
+    "mayor": "郝龍斌",
+    "income": "1571.68",
+    "outcome": "1548.0",
+    "loan": "0",
+    "return": "66"
   },
   {
     "year": "98",
     "debt": "1487.5",
-    "mayor": "郝龍斌"
+    "mayor": "郝龍斌",
+    "income": "1621.23",
+    "outcome": "1621.23",
+    "loan": "0",
+    "return": "66"
   },
   {
     "year": "99",
     "debt": "1461.5",
-    "mayor": "郝龍斌"
+    "mayor": "郝龍斌",
+    "income": "1690.71",
+    "outcome": "1688.79",
+    "loan": "40",
+    "return": "66"
   },
   {
     "year": "100",
     "debt": "1665.5",
-    "mayor": "郝龍斌"
+    "mayor": "郝龍斌",
+    "income": "1797.62",
+    "outcome": "1796.32",
+    "loan": "270",
+    "return": "66"
   },
   {
     "year": "101",
     "debt": "1641.7",
-    "mayor": "郝龍斌"
+    "mayor": "郝龍斌",
+    "income": "1826.75",
+    "outcome": "1826.75",
+    "loan": "42",
+    "return": "66"
   },
   {
     "year": "102",
     "debt": "1630.7",
-    "mayor": "郝龍斌"
+    "mayor": "郝龍斌",
+    "income": "1762.69",
+    "outcome": "1761.8",
+    "loan": "55",
+    "return": "66"
   },
   {
     "year": "103",
     "debt": "1468.7",
-    "mayor": "郝龍斌"
+    "mayor": "郝龍斌",
+    "income": "1887.24",
+    "outcome": "1847.04",
+    "loan": "20",
+    "return": "182"
   },
   {
     "year": "104",
     "debt": "1302.7",
-    "mayor": "柯文哲"
+    "mayor": "柯文哲",
+    "income": "1843.48",
+    "outcome": "1727.88",
+    "loan": "30",
+    "return": "196"
   },
   {
     "year": "105",
     "debt": "1168.0",
-    "mayor": "柯文哲"
+    "mayor": "柯文哲",
+    "income": "1799.12",
+    "outcome": "1702.78",
+    "loan": "10",
+    "return": "144.67"
   },
   {
     "year": "106",
     "debt": "1048.0",
-    "mayor": "柯文哲"
+    "mayor": "柯文哲",
+    "income": "1756.29",
+    "outcome": "1738.56",
+    "loan": "0",
+    "return": "120"
   },
   {
     "year": "107",
     "debt": "938",
-    "mayor": "柯文哲"
+    "mayor": "柯文哲",
+    "income": "",
+    "outcome": "",
+    "loan": "0",
+    "return": "110"
   }
 ]
