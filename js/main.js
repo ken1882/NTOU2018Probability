@@ -319,6 +319,22 @@ function uncheckAll(){
   if(debtChart){debtChart.update();}
 }
 
+function randomColor(){
+  chosenColor = [ChartManager.color.UltraDimGray, ChartManager.color.UltraDimGrey, ChartManager.color.Black];
+  for(let i=0;i<debtChart.datasets.length;++i){
+    let bc = ChartManager.randomColor(chosenColor);
+    chosenColor.push(bc);
+    debtChart.changeDataBackgroundColor(i, bc);
+
+    bc = ChartManager.randomColor(chosenColor);
+    chosenColor.push(bc);
+    debtChart.changeDataBorderColor(i, bc);
+  }
+  drawSingleChart(selections.selectedOptions[0]);
+  debtChart.update();
+  singleChart.update();
+}
+
 function getDataTick(index){
   switch(index){
   case 0:
