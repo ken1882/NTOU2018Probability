@@ -1,5 +1,5 @@
 var plane, data = [], config, debtChart, chosenColor = [], mayorsIndex = [];
-var plane_single, toolbar, selections;
+var plane_single, toolbar, selections, boxChart, data_delta = [];
 
 function start(){
   plane = new Bitmap(0, 0, 800, 600);
@@ -21,6 +21,7 @@ function start(){
 function createChart(){
   debtChart = new SChart(plane.canvas);
   singleChart = new SChart(plane_single.canvas);
+  drawBoxChart();
   drawChart();
 }
 
@@ -351,4 +352,53 @@ function getDataTick(index){
     return [0, 500];
   }
   return [-500, 2000];
+}
+
+function drawBoxChart(){
+  let ar = [];
+  for(let i=1;i<data.length;++i){
+    ar.push(data[i-1].debt - data[i].debt);
+  }
+  data_delta = Util.clone(ar);
+  let trace = {
+    x: ar,
+    type: 'box',
+    name: ''
+  }
+  let layout = {
+    title: '還債盒鬚圖',
+    plot_bgcolor: '#000000',
+  };
+  let dat = [trace]
+  boxChart = Plotly.newPlot('boxChart', dat, layout);
+  document.getElementsByClassName("main-svg")[0].style.background = 'rgb(0,0,0)';
+  let box = document.getElementsByClassName("nsewdrag drag")[0];
+  box.addEventListener("mousemove", function(){
+    setTimeout(function(){
+      let texts = document.getElementsByClassName("nums");
+      for(let i=0;i<texts.length;++i){
+        let txt = texts[i].innerHTML;
+        if(txt.indexOf('(') > -1){break;}
+        let v = txt.split(':')[1], vs = '';
+        for(let i=0;i<v.length;++i){vs += (v[i] == '−' ? '-' : v[i])}
+        v = parseFloat(vs);
+        for(let j=0;j<data_delta.length;++j){
+          if(data_delta[j].toFixed(2) == v){
+            txt += `  (${data[j+1].mayor})`;
+            texts[i].innerHTML = txt;
+            break;
+          }
+        }
+      }
+    }, 100)
+  })
+}
+
+function toggleDataSeries(e) {
+	if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	} else {
+		e.dataSeries.visible = true;
+	}
+	e.chart.render();
 }
