@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>貝式分類器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="tablestyle.css" />
+  <script src="js/main.js"></script>
+</head>
+<body>
+  <script type="text/javascript" src="js/core.js"></script>
+  <h1>貝式分類器</h1>
+  <div>來看看你是屬於男性還是女性體位?</div>
+  <br>
+  <br>
+  <div>
+    身高:
+    <input type="text" id="he" size="5" autofocus> (公分)<br><br>
+    體重:
+    <input type="text" id="we" size="5" autofocus> (公斤)<br><br>
+    年齡:
+    <input type="text" id="ag" size="2" autofocus>　　<br><br>
+    <br>
+    <input type="button" onclick="judge()" value="計算!">
+  </div>
+  <br>
+  <div id="result" style="font-size:150%"></div>
+  <div style="position:fixed;bottom:2%;left:50%;transform:translate(-50%,-50%);">
+    資料來源:
+    <a href="https://dep.mohw.gov.tw/DOS/mp-113.html">衛生福利部統計處</a> | 
+    <a href="https://data.gov.tw/">政府開放資料平台</a> | 
+    <a href="https://www.semanticscholar.org/">Semanticscholar</a>
+  </div>
+</body>
+</html>

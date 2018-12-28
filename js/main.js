@@ -370,10 +370,12 @@ function drawBoxChart(){
     title: '還債盒鬚圖',
     plot_bgcolor: '#000000',
   };
-  let dat = [trace]
+  let dat = [trace];
+
   boxChart = Plotly.newPlot('boxChart', dat, layout);
   document.getElementsByClassName("main-svg")[0].style.background = 'rgb(0,0,0)';
   let box = document.getElementsByClassName("nsewdrag drag")[0];
+
   box.addEventListener("mousemove", function(){
     setTimeout(function(){
       let texts = document.getElementsByClassName("nums");
@@ -393,7 +395,8 @@ function drawBoxChart(){
         }
       }
     }, 100)
-  })
+  });
+  
 }
 
 function toggleDataSeries(e) {
