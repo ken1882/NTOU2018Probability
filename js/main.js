@@ -363,7 +363,8 @@ function drawBoxChart(){
   let trace = {
     x: ar,
     type: 'box',
-    name: ''
+    name: '',
+    boxpoints: 'all'
   }
   let layout = {
     title: '還債盒鬚圖',
@@ -379,7 +380,8 @@ function drawBoxChart(){
       for(let i=0;i<texts.length;++i){
         let txt = texts[i].innerHTML;
         if(txt.indexOf('(') > -1){break;}
-        let v = txt.split(':')[1], vs = '';
+        let v = txt.split(':'), vs = '';
+        v = v[1] ? v[1] : v[0];
         for(let i=0;i<v.length;++i){vs += (v[i] == '−' ? '-' : v[i])}
         v = parseFloat(vs);
         for(let j=0;j<data_delta.length;++j){
