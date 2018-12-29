@@ -1,7 +1,7 @@
 var data = {}, ready = false, weightData = {"male": {}, "female": {}}, heightData = {"male": {}, "female": {}};
 var dataAvgHeight = {"male": {}, "female": {}}, dataAvgWeight = {"male": {}, "female": {}};
 var maleFactor = 1, femaleFactor = 1;
-var maleAvgBMI = 23.4, femaleAvgBMI = 23.357;
+var maleAvgBMI = 24.65, femaleAvgBMI = 24.0;
 var variance = {}, exp = {}, scale = {};
 
 var ge, he, we, re;
@@ -37,7 +37,7 @@ function loadData(){
 function calculate(){
   calculateAge();
   calcDataAvg();
-  calcFactor();;
+  calcFactor(1.037374);
   calcVariance();
 }
 
@@ -106,15 +106,15 @@ function calcDataAvg(){
   
 }
 
-function calcFactor(){
-  let s = 0, cnt = 0, div = 1.03;
+function calcFactor(div = 1.0085){
+  let s = 0, cnt = 0;
+
   for(let p in dataAvgHeight.male){
     if(dataAvgHeight.male.hasOwnProperty(p)){
       s += dataAvgHeight.male[p] / (getAvgHeight(parseInt(p), 'male'));
       cnt += 1;
     }
   }
-
   maleFactor = s / cnt / div;
   s = 0; cnt = 0;
   for(let p in dataAvgHeight.female){
@@ -128,29 +128,38 @@ function calcFactor(){
 
 function getAvgHeight(age, gender){
   if(gender == "male"){
-    let h1 = 76.4 - 19.4 * Math.pow(Math.E, -1.56 * age);
-    let h3 = 16.1 / (1 + Math.pow(Math.E, 16.4 - 1.2 * age));
-    age = Math.min(age, 20);
-    let h2 = -0.235 * age * age + 9.5 * age - 4.7;
-    return maleFactor * (h1 + h2 + h3);
+    return maleFactor * Math.max(calcGrowth(age, 'male'), calcGrowth(age, 'female'));
   }
   else{
-    let h1 = 74.3 - 18.7 * Math.pow(Math.E, -1.65 * age);
-    let h3 = 8.6 / (1 + Math.pow(Math.E, 12.4 - 1.1 * age));
+    return femaleFactor * Math.min(calcGrowth(age, 'male'), calcGrowth(age, 'female'));
+  }
+}
+
+function calcGrowth(age, gender){
+  if(gender == "male"){
+    let h1 = 76.4 - 19.4 * Math.pow(Math.E, -1.56 * Math.min(age, 5));
+    let h3 = 16.1 / (1 + Math.pow(Math.E, 16.4 - 1.2 * Math.min(age, 50)));
+    age = Math.min(age, 20);
+    let h2 = -0.235 * age * age + 9.5 * age - 4.7;
+    return (h1 + h2 + h3);
+  }
+  else{
+    let h1 = 74.3 - 18.7 * Math.pow(Math.E, -1.65 * Math.min(age, 5));
+    let h3 = 8.6 / (1 + Math.pow(Math.E, 12.4 - 1.1 * Math.min(age, 50)));
     age = Math.min(age, 20);
     let h2 = -0.256 * age * age + 9.8 * age - 4.8;
-    return femaleFactor * (h1 + h2 + h3);
+    return (h1 + h2 + h3);
   }
 }
 
 function getAvgWeight(age, gender){
   if(gender == "male"){
     let h = Math.pow(getAvgHeight(age, gender) / 100, 2);
-    return h * maleAvgBMI;
+    return maleFactor * h * maleAvgBMI;
   }
   else{
     let h = Math.pow(getAvgHeight(age, gender) / 100, 2);
-    return h * femaleAvgBMI;
+    return femaleFactor * h * femaleAvgBMI;
   }
 }
 
@@ -167,6 +176,15 @@ function calcVariance(){
       weight: (1 / variance.female.weight * Math.sqrt(2 * Math.PI)),
     }
   };
+}
+
+function determineResult(w, h, a){
+  let mhp = scale.male.height * Math.pow(Math.E, -1 * Math.pow(h - getAvgHeight(a, 'male'), 2) / (2 * Math.pow(variance.male.height, 2)));
+  let mwp = scale.male.weight * Math.pow(Math.E, -1 * Math.pow(w - getAvgWeight(a, 'male'), 2) / (2 * Math.pow(variance.male.weight, 2)));
+  let fhp = scale.female.height * Math.pow(Math.E, -1 * Math.pow(h - getAvgHeight(a, 'female'), 2) / (2 * Math.pow(variance.female.height, 2)));
+  let fwp = scale.female.weight * Math.pow(Math.E, -1 * Math.pow(w - getAvgWeight(a, 'female'), 2) / (2 * Math.pow(variance.female.weight, 2)));  
+  let mp = mhp * mwp, fp = fhp * fwp;
+  return (mp > fp) ? 'male' : 'female';
 }
 
 function judge(){
@@ -198,4 +216,60 @@ function judge(){
     txt += "<br><span style='font-size:300%'>您屬於: 女性體位</span>";
   }
   re.innerHTML = txt;
+}
+
+function logResult(){
+  console.log("Factor:");
+  console.log(`Male: ${maleFactor} Female: ${femaleFactor}`)
+  for(let i=1;i<=100;++i){
+    console.log("---------------------\n" + i + ':')
+    console.log(`Male: ${getAvgHeight(i, 'male')} ${getAvgWeight(i, 'male')}`)
+    console.log(`Female: ${getAvgHeight(i, 'female')} ${getAvgWeight(i, 'female')}`)
+  }
+}
+
+function logTrainingDataResult(log = false){
+  if(log){
+    console.log("========================")
+    console.log("Male test:");
+  }
+  let cnt = 0, correct = 0;
+  for(let p in heightData.male){
+    if(heightData.male.hasOwnProperty(p)){
+      let a = parseInt(p);
+      for(let i=0;i<heightData.male[p].length;++i){
+        let w = weightData.male[p][i];
+        let h = heightData.male[p][i];
+        let re = determineResult(w, h, a);
+        if(log){
+          console.log(`A: ${a} H: ${h} W: ${w}`);
+          console.log(`${re} ${re=='male' ? 'O' : 'X'}`);
+        }
+        cnt += 1;
+        if(re == 'male'){correct += 1;}
+      }
+    }
+  }
+  if(log){
+    console.log("========================")
+    console.log("Female test:");
+  }
+  for(let p in heightData.female){
+    if(heightData.female.hasOwnProperty(p)){
+      let a = parseInt(p);
+      for(let i=0;i<heightData.female[p].length;++i){
+        let w = weightData.female[p][i];
+        let h = heightData.female[p][i];
+        let re = determineResult(w, h, a);
+        if(log){
+          console.log(`A: ${a} H: ${h} W: ${w}`);
+          console.log(`${re} ${re=='female' ? 'O' : 'X'}`);
+        }
+        cnt += 1;
+        if(re == 'female'){correct += 1;}
+      }
+    }
+  }
+
+  return correct / cnt;
 }
