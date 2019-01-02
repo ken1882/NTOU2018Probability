@@ -355,11 +355,12 @@ function getDataTick(index){
 }
 
 function drawBoxChart(){
-  let ar = [];
+  let ar = [0];
   for(let i=1;i<data.length;++i){
     ar.push(data[i-1].debt - data[i].debt);
   }
   data_delta = Util.clone(ar);
+  console.log(ar);
   let trace = {
     x: ar,
     type: 'box',
