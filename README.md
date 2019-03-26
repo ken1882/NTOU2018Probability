@@ -5,3 +5,6 @@
  ## Naive Bayes Classifier
  
  https://ken1882.github.io/NTOU2018Probability/NaiveBayesClassifier
+
+ ## Binomial Distribution Calculator
+ https://ken1882.github.io/NTOU2018Probability/binomial.html

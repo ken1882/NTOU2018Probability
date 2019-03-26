@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>二項式分布</title>
+  <style>
+    body{
+      background-color: black;
+      color:white;
+      text-align: center;
+    }
+  </style>
+  <script>
+    var lower, op_l, op_h, higher, times, percent, ans;
+
+    function start(){
+      lower   = document.getElementById("lower");   // The value at left of X
+      op_l    = document.getElementById("op_l");    // The operator at left of X
+      op_h    = document.getElementById("op_h");    // The operator ar right of X
+      higher  = document.getElementById("higher");  // The value ar right of X
+      times   = document.getElementById("times");   // Total tested times
+      percent = document.getElementById("percent"); // Success rate
+      result  = document.getElementById("result");  // Result element
+      window.setInterval(update_enable);            // Detect whether left symbols is needed
+    }
+
+    function update_enable(){
+      // Disable left symbols
+      if(op_h.value == '=' || op_h.value == '>' || op_h.value == '>='){
+        lower.disabled = true;
+        op_l.disabled  = true;
+      }
+      else{
+        lower.disabled = false;
+        op_l.disabled  = false;
+      }
+    }
+    
+    // Simple combination formula
+    function CnTm(n, m){
+      var t = 1, b = 1;
+      for(i=n;i>n-m;--i){
+        t *= i;
+      }
+      for(i=1;i<=m;++i){
+        b *= i;
+      }
+      return t / b;
+    }
+    
+    // Calculatee binomial distibution
+    function calc_bio(n, x, p){
+      var a = CnTm(n, x), b = p ** x, c = ((1 - p) ** (n - x));
+      return a * b * c;
+    }
+    
+    // Check whether all given arguments is valid
+    function is_valid(){
+      for(let i=0; i < arguments.length; ++i){
+        if(isNaN(arguments[i])){return false;}
+      }
+      return true;
+    }
+
+    // Main calculation
+    function calc(){
+      var n = parseInt(times.value), p = parseFloat(percent.value);
+      var top = parseInt(higher.value), bot = parseInt(lower.value);
+      
+      // Auto correct left value to 0 if it's invalid
+      if(!is_valid(bot)){
+        bot = 0;
+        lower.value = '0';
+      }
+      
+      // Display string prefix
+      var prefix = "累積機率: "
+
+      // Do the calculate if valid
+      if(is_valid(top, n, p) && p <= 1){
+        var ans = 0;
+        if(top > n){
+          // impossible to happen, does nothing
+        }
+        else if(op_h.value == '='){
+          ans = calc_bio(n, top, p);
+          // Only test once so chance is not stacked
+          prefix = "機率: ";
+        }
+        else if(op_h.value == '>' || op_h.value == '>='){
+          console.log('Accumulate:')
+          if(op_h.value == '>'){top += 1;}
+          for(let i=0;i<top;++i){
+            ans += calc_bio(n, i, p);
+            console.log(i, ans);
+          }
+          ans = 1 - ans;
+        }
+        else{
+          if(op_h.value == '<'){top -= 1;}
+          if(op_l.value == '<' && bot > 0){bot -= 1;}
+          for(let i = bot; i <= top; ++i){
+            ans += calc_bio(n, i, p);
+            console.log(i, ans);
+          }
+        }
+        ans_ori = ans;
+        ans = ans.toFixed(15);
+        re_string = prefix + ans_ori + "<br>(" + ans + ')';
+      }
+      else{
+        re_string = "無效輸入"
+      }
+
+      // Prase result to HTML
+      result.innerHTML = re_string;
+    }
+
+    window.addEventListener("load", start, false);
+  </script>
+</head>
+<body>
+  <h1>二項式分布計算機</h1>
+  <form>
+    成功次數:
+    <input type="text" id="lower" size="5" autofocus>
+    <select id="op_l">
+      <option> <= </option>
+      <option> < </option>
+    </select>
+    X
+    <select id="op_h">
+      <option> <= </option>
+      <option> <  </option>
+      <option> >= </option>
+      <option> > </option>
+      <option> = </option>
+    </select>
+    <input type="text" id="higher" size="5" required>
+    <br><br>
+    執行次數 (n):
+    <input type="text" id="times" size="5" required>
+    <br><br>
+    成功機率:
+    <input type="text" id="percent" size="5" required>
+    <br><br>
+    <input type="button" onclick="return calc()" value="開始計算">
+  </form>
+  <p id="result"></p>
+</body>
+</html>
